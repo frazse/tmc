@@ -16,7 +16,9 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include <SDL3/SDL.h>
+#include <SDL3/SDL_main.h>
 #include "port_launcher_bootstrap.h"
 
 /*
@@ -271,6 +273,7 @@ static void Port_ReserveGbaAddressSpace(void) {
 static void Port_ReserveGbaAddressSpace(void) { /* not needed on Linux/macOS */ }
 #endif
 
+__attribute__((visibility("default")))
 int main(int argc, char* argv[]) {
 
     /* Must run before any std::vector / new / malloc that could land in
@@ -281,7 +284,12 @@ int main(int argc, char* argv[]) {
      * sufficient in practice. */
     Port_ReserveGbaAddressSpace();
 
-    fprintf(stderr, "Initializing port layer...\n");
+    char cwd[1024];
+    if (getcwd(cwd, sizeof(cwd)) != NULL) {
+        SDL_Log("Current working directory: %s", cwd);
+    }
+
+    SDL_Log("Initializing port layer...");
 
     // Initialize REG_KEYINPUT to all-keys-released (GBA: 1=not pressed)
     *(u16*)(gIoMem + REG_OFFSET_KEYINPUT) = 0x03FF;
@@ -358,10 +366,14 @@ int main(int argc, char* argv[]) {
      * SDL_CreateRenderer call, with driver=opengl. */
     SDL_Window* window = NULL;
     SDL_Renderer* prerenderer = NULL;
+    Uint32 window_flags = SDL_WINDOW_RESIZABLE;
+#ifdef __ANDROID__
+    window_flags |= SDL_WINDOW_FULLSCREEN;
+#endif
     if (!SDL_CreateWindowAndRenderer(
             "The Minish Cap",
             240 * window_scale, 160 * window_scale,
-            SDL_WINDOW_RESIZABLE,
+            window_flags,
             &window, &prerenderer)) {
         fprintf(stderr, "SDL_CreateWindowAndRenderer Error: %s\n", SDL_GetError());
         SDL_Quit();

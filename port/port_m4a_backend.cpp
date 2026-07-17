@@ -64,13 +64,6 @@ extern const MusicPlayer gMusicPlayers[];
 #include <string>
 #include <vector>
 
-#ifdef TMC_ANDROID_PORT
-extern "C" {
-extern const unsigned char kEmbeddedSoundsJson[];
-extern const std::size_t kEmbeddedSoundsJsonSize;
-}
-#endif
-
 namespace {
 
 constexpr uint32_t kPlayerCount = 32;
@@ -221,15 +214,10 @@ static std::string LoadSoundsJson(void) {
         }
     }
 
-#ifdef TMC_ANDROID_PORT
-    if (kEmbeddedSoundsJsonSize > 0) {
-        return std::string(reinterpret_cast<const char*>(kEmbeddedSoundsJson), kEmbeddedSoundsJsonSize);
-    }
-#else
-    /* Compile-time fallback: every tmc_pc build embeds a copy of
-     * assets/sounds.json so a bare `tmc_pc + baserom.gba` install
-     * still has audio. kSize is 0 only when assets/sounds.json was
-     * missing at build time (in which case we fall through to the
+    /* Compile-time fallback: every build embeds a copy of
+     * assets/sounds.json so a bare install still has audio.
+     * kSize is 0 only when assets/sounds.json was missing at
+     * build time (in which case we fall through to the
      * silent-songs warning below). */
     if (PortSoundsEmbed::kSize > 0) {
         std::fprintf(stderr,
@@ -238,7 +226,6 @@ static std::string LoadSoundsJson(void) {
         return std::string(reinterpret_cast<const char*>(PortSoundsEmbed::kData),
                            PortSoundsEmbed::kSize);
     }
-#endif
 
     std::fprintf(stderr, "[AUDIO] sounds.json not found — songs will be silent\n");
     return {};

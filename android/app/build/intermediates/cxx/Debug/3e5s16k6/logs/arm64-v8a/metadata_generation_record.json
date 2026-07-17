@@ -1,0 +1,17 @@
+[
+{
+  "message": "Start JSON generation. Platform version: 21 min SDK version: arm64-v8a",
+  "file": "/home/azu/git/tmc/android/app/src/main/jni/CMakeLists.txt",
+  "tag": "debug|arm64-v8a"
+},
+{
+  "message": "JSON \u0027/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/arm64-v8a/android_gradle_build.json\u0027 was up-to-date",
+  "file": "/home/azu/git/tmc/android/app/src/main/jni/CMakeLists.txt",
+  "tag": "debug|arm64-v8a"
+},
+{
+  "message": "JSON generation completed without problems",
+  "file": "/home/azu/git/tmc/android/app/src/main/jni/CMakeLists.txt",
+  "tag": "debug|arm64-v8a"
+}
+]

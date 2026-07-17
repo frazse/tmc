@@ -1,0 +1,71 @@
+1<?xml version="1.0" encoding="utf-8"?>
+2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+3    package="com.matheovignaud.tmc"
+4    android:versionCode="1"
+5    android:versionName="1.0" >
+6
+7    <uses-sdk
+7-->INJECTED
+8        android:minSdkVersion="21"
+8-->INJECTED
+9        android:targetSdkVersion="34" />
+9-->INJECTED
+10
+11    <uses-permission android:name="android.permission.VIBRATE" />
+11-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:5:5-66
+11-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:5:22-63
+12    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+12-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:6:5-80
+12-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:6:22-77
+13    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+13-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:7:5-81
+13-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:7:22-78
+14
+15    <application
+15-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:9:5-32:19
+16        android:allowBackup="true"
+16-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:10:9-35
+17        android:debuggable="true"
+18        android:extractNativeLibs="false"
+18-->INJECTED
+19        android:icon="@mipmap/ic_launcher"
+19-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:11:9-43
+20        android:label="tmc"
+20-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:13:9-28
+21        android:roundIcon="@mipmap/ic_launcher_round"
+21-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:12:9-54
+22        android:supportsRtl="true"
+22-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:14:9-35
+23        android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+23-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:15:9-67
+24        <activity
+24-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:17:9-25:20
+25            android:name="com.matheovignaud.tmc.RomPickerActivity"
+25-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:18:13-46
+26            android:exported="true"
+26-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:19:13-36
+27            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+27-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:20:13-71
+28            <intent-filter>
+28-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:21:13-24:29
+29                <action android:name="android.intent.action.MAIN" />
+29-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:22:17-69
+29-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:22:25-66
+30
+31                <category android:name="android.intent.category.LAUNCHER" />
+31-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:23:17-77
+31-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:23:27-74
+32            </intent-filter>
+33        </activity>
+34        <activity
+34-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:27:9-31:20
+35            android:name="com.matheovignaud.tmc.TmcActivity"
+35-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:28:13-40
+36            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout"
+36-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:29:13-87
+37            android:exported="true" >
+37-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:30:13-36
+38        </activity>
+39    </application>
+40
+41</manifest>

@@ -33,6 +33,8 @@ extern Frame* gSpriteAnimations_322[];
 
 #include <nlohmann/json.hpp>
 
+#include <SDL3/SDL_log.h>
+
 #include <array>
 #include <atomic>
 #include <chrono>
@@ -195,9 +197,9 @@ void AssetLogOnce(const std::string& key, const char* fmt, ...) {
 
     std::va_list args;
     va_start(args, fmt);
-    std::fprintf(stderr, "[ASSET] ");
-    std::vfprintf(stderr, fmt, args);
-    std::fprintf(stderr, "\n");
+    char buffer[4096];
+    vsnprintf(buffer, sizeof(buffer), fmt, args);
+    SDL_Log("[ASSET] %s", buffer);
     va_end(args);
 }
 
@@ -253,14 +255,22 @@ std::optional<std::filesystem::path> GetExecutableDirectory() {
  * candidate actually contains the expected JSON manifest. */
 static std::vector<std::filesystem::path> AssetSearchRoots() {
     std::vector<std::filesystem::path> roots;
+#ifdef __ANDROID__
+    const char* androidRuntimeDir = std::getenv("TMC_ANDROID_RUNTIME_DIR");
+    if (androidRuntimeDir != nullptr && androidRuntimeDir[0] != '\0') {
+        roots.push_back(std::filesystem::path(androidRuntimeDir));
+    }
+#endif
     const auto exeDir = GetExecutableDirectory();
     if (exeDir.has_value()) {
         roots.push_back(*exeDir);
     }
     std::error_code ec;
     const auto cwd = std::filesystem::current_path(ec);
-    if (!ec && (!exeDir.has_value() || *exeDir != cwd)) {
-        roots.push_back(cwd);
+    if (!ec) {
+        if (!exeDir.has_value() || *exeDir != cwd) {
+            roots.push_back(cwd);
+        }
     }
     return roots;
 }
@@ -1104,13 +1114,13 @@ bool EnsureAssetGroupCache() {
         const std::filesystem::path runtimeRoot = RuntimeRootForEditableRoot(*editableRoot);
         std::string buildInfo;
         if (!PortAssetPipeline::EnsureRuntimeAssetsBuilt(*editableRoot, runtimeRoot, &buildInfo)) {
-            std::fprintf(stderr, "[ASSET] Failed to build runtime assets from %s: %s\n",
+            SDL_Log("[ASSET] Failed to build runtime assets from %s: %s",
                          editableRoot->string().c_str(), buildInfo.c_str());
             return false;
         }
 
         if (!buildInfo.empty()) {
-            std::fprintf(stderr, "[ASSET] Rebuilt runtime assets from %s (%s)\n", editableRoot->string().c_str(),
+            SDL_Log("[ASSET] Rebuilt runtime assets from %s (%s)", editableRoot->string().c_str(),
                          buildInfo.c_str());
         }
 
@@ -1120,8 +1130,11 @@ bool EnsureAssetGroupCache() {
     }
 
     if (!assetsRoot.has_value()) {
+        SDL_Log("[ASSET] No runtime assets root found in any search path.");
         return false;
     }
+
+    SDL_Log("[ASSET] Found assets root: %s", assetsRoot->string().c_str());
 
     nlohmann::json gfxGroupsJson;
     nlohmann::json paletteGroupsJson;
@@ -1142,6 +1155,7 @@ bool EnsureAssetGroupCache() {
         !LoadOptionalJson(*assetsRoot / "area_tiles.json", areaTilesJson) ||
         !LoadOptionalJson(*assetsRoot / "sprite_ptrs.json", spritePtrsJson) ||
         !LoadOptionalJson(*assetsRoot / "texts.json", textsJson)) {
+        SDL_Log("[ASSET] Failed to load essential JSON manifests from %s", assetsRoot->string().c_str());
         return false;
     }
 
@@ -1150,12 +1164,6 @@ bool EnsureAssetGroupCache() {
                                    !areaRoomMapsJson.is_null() && !areaTablesJson.is_null() && !areaTilesJson.is_null();
     gAssetGroupCache.hasSpritePtrData = !spritePtrsJson.is_null();
     gAssetGroupCache.hasTextData = !textsJson.is_null();
-
-#ifdef TMC_ANDROID_PORT
-    gAssetGroupCache.hasAreaData = false;
-    gAssetGroupCache.hasSpritePtrData = false;
-    gAssetGroupCache.hasTextData = false;
-#endif
 
     try {
         ParseGfxGroups(gfxGroupsJson);

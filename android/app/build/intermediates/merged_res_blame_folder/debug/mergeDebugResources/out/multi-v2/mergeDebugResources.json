@@ -1,0 +1,26 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.matheovignaud.tmc.app-debug-3:/values_values.arsc.flat",
+            "map": [
+                {
+                    "source": "/home/azu/git/tmc/android/app/src/main/res/values/strings.xml",
+                    "from": {
+                        "startLines": "1",
+                        "startColumns": "4",
+                        "startOffsets": "16",
+                        "endColumns": "40",
+                        "endOffsets": "52"
+                    },
+                    "to": {
+                        "startLines": "2",
+                        "startColumns": "4",
+                        "startOffsets": "55",
+                        "endColumns": "40",
+                        "endOffsets": "91"
+                    }
+                }
+            ]
+        }
+    ]
+}

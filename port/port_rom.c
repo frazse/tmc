@@ -50,6 +50,7 @@ static SpritePtr sSpritePtrsStable[512];
 static const char* kRomCandidates[] = {
     "baserom.gba",            /* USA default */
     "baserom_eu.gba",         /* EU default */
+    "/sdcard/baserom.gba",    /* Android SD card root */
     "synthetic_baserom.gba",  /* generated from extracted assets */
     "build/pc/baserom.gba",   /* copied to build dir */
     "build/pc/baserom_eu.gba",
@@ -103,6 +104,17 @@ const char* Port_FindBaseRomPath(void) {
 /* Bitfield: 1 = page already extracted this session */
 static u8 sExtractedPages[ROM_MAX_PAGES / 8];
 
+static const char* GetRomExtractDir(void) {
+    static char sExtractDir[4096];
+    const char* envDir = getenv("TMC_ANDROID_RUNTIME_DIR");
+    if (envDir && envDir[0] != '\0') {
+        snprintf(sExtractDir, sizeof(sExtractDir), "%s/" ROM_EXTRACT_DIR, envDir);
+    } else {
+        snprintf(sExtractDir, sizeof(sExtractDir), ROM_EXTRACT_DIR);
+    }
+    return sExtractDir;
+}
+
 static void MarkPageExtracted(u32 page) {
     sExtractedPages[page / 8] |= (u8)(1 << (page % 8));
 }
@@ -111,10 +123,11 @@ static int IsPageExtracted(u32 page) {
 }
 
 static void EnsureExtractDir(void) {
+    const char* dir = GetRomExtractDir();
 #ifdef _WIN32
-    _mkdir(ROM_EXTRACT_DIR);
+    _mkdir(dir);
 #else
-    mkdir(ROM_EXTRACT_DIR, 0755);
+    mkdir(dir, 0755);
 #endif
 }
 
@@ -135,8 +148,8 @@ static void ExtractPage(u32 page) {
 
     EnsureExtractDir();
 
-    char path[256];
-    snprintf(path, sizeof(path), ROM_EXTRACT_DIR "/%08X.bin", offset);
+    char path[4096];
+    snprintf(path, sizeof(path), "%s/%08X.bin", GetRomExtractDir(), offset);
 
     /* Don't overwrite if file already exists with correct size */
     FILE* chk = fopen(path, "rb");
@@ -255,11 +268,13 @@ static int LoadExtractedPagesFrom(const char* dir) {
 /* Try multiple rom_data directories and return total pages loaded */
 static int LoadExtractedPages(void) {
     const char* dirs[] = {
+        GetRomExtractDir(),
         ROM_EXTRACT_DIR,  /* rom_data/ (cwd) */
         "../../rom_data", /* project root from build/pc/ */
     };
     int total = 0;
     for (int i = 0; i < (int)(sizeof(dirs) / sizeof(dirs[0])); i++) {
+        if (!dirs[i] || dirs[i][0] == '\0') continue;
         int n = LoadExtractedPagesFrom(dirs[i]);
         if (n > 0) {
             fprintf(stderr, "  rom_data: %d pages from %s\n", n, dirs[i]);
@@ -290,8 +305,8 @@ void Port_PrintRomAccessSummary(void) {
         if (IsPageExtracted(p))
             count++;
     }
-    fprintf(stderr, "\n[ROM] Summary: %d pages (4 KB each, %d KB total) extracted to " ROM_EXTRACT_DIR "/\n", count,
-            count * 4);
+    fprintf(stderr, "\n[ROM] Summary: %d pages (4 KB each, %d KB total) extracted to %s/\n", count,
+            count * 4, GetRomExtractDir());
     fflush(stderr);
 }
 
@@ -816,6 +831,7 @@ static int GetExeDir(char* out, size_t n) {
 #endif
 }
 
+#include <errno.h>
 static FILE* TryOpenRom(const char** paths, int count, char* foundPath, int foundPathLen) {
     /* Pass 1: exe_dir/<basename> for any candidate that's a bare filename. */
     char exeDir[4096];
@@ -842,11 +858,35 @@ static FILE* TryOpenRom(const char** paths, int count, char* foundPath, int foun
 
     /* Pass 2: original cwd-relative candidates. */
     for (int i = 0; i < count; i++) {
+        SDL_Log("Trying ROM candidate: %s", paths[i]);
         FILE* f = fopen(paths[i], "rb");
         if (f) {
+            SDL_Log("Found ROM at: %s", paths[i]);
             if (foundPath)
                 snprintf(foundPath, foundPathLen, "%s", paths[i]);
             return f;
+        } else {
+            SDL_Log("Failed to open %s: %s", paths[i], strerror(errno));
+        }
+    }
+
+    /* Pass 3: Android runtime directory */
+    const char* envDir = getenv("TMC_ANDROID_RUNTIME_DIR");
+    if (envDir && envDir[0] != '\0') {
+        for (int i = 0; i < count; i++) {
+            const char* p = paths[i];
+            if (!p || strchr(p, '/') || strchr(p, '\\'))
+                continue;
+            char prefixed[4096 + 256];
+            snprintf(prefixed, sizeof(prefixed), "%s/%s", envDir, p);
+            SDL_Log("Trying Android ROM candidate: %s", prefixed);
+            FILE* f = fopen(prefixed, "rb");
+            if (f) {
+                SDL_Log("Found Android ROM at: %s", prefixed);
+                if (foundPath)
+                    snprintf(foundPath, foundPathLen, "%s", prefixed);
+                return f;
+            }
         }
     }
     return NULL;

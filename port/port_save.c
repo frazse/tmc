@@ -21,6 +21,17 @@
 #define EEPROM_BLOCKS (EEPROM_SIZE / EEPROM_BLOCK) /* 1024 */
 #define SAVE_FILENAME "tmc.sav"
 
+static const char* GetSavePath(void) {
+    static char sPath[4096];
+    const char* envDir = getenv("TMC_ANDROID_RUNTIME_DIR");
+    if (envDir && envDir[0] != '\0') {
+        snprintf(sPath, sizeof(sPath), "%s/%s", envDir, SAVE_FILENAME);
+    } else {
+        snprintf(sPath, sizeof(sPath), SAVE_FILENAME);
+    }
+    return sPath;
+}
+
 static u8 sEeprom[EEPROM_SIZE];
 static int sEepromDirty = 0; /* set on write, cleared on flush */
 static int sEepromInited = 0;
@@ -28,27 +39,30 @@ static int sEepromInited = 0;
 /* ---- Persistence -------------------------------------------------------- */
 
 static void LoadEepromFile(void) {
-    FILE* f = fopen(SAVE_FILENAME, "rb");
+    const char* path = GetSavePath();
+    FILE* f = fopen(path, "rb");
     if (f) {
         fread(sEeprom, 1, EEPROM_SIZE, f);
         fclose(f);
-        fprintf(stderr, "[SAVE] Loaded save file: %s\n", SAVE_FILENAME);
+        fprintf(stderr, "[SAVE] Loaded save file: %s\n", path);
     } else {
         memset(sEeprom, 0xFF, EEPROM_SIZE); /* blank EEPROM = 0xFF */
-        fprintf(stderr, "[SAVE] No save file found, starting fresh.\n");
+        fprintf(stderr, "[SAVE] No save file found at %s, starting fresh.\n", path);
     }
 }
 
 static void FlushEepromFile(void) {
     if (!sEepromDirty)
         return;
-    FILE* f = fopen(SAVE_FILENAME, "wb");
+    const char* path = GetSavePath();
+    FILE* f = fopen(path, "wb");
     if (f) {
         fwrite(sEeprom, 1, EEPROM_SIZE, f);
         fclose(f);
         sEepromDirty = 0;
+        fprintf(stderr, "[SAVE] Flushed save file: %s\n", path);
     } else {
-        fprintf(stderr, "[SAVE] ERROR: Could not write %s\n", SAVE_FILENAME);
+        fprintf(stderr, "[SAVE] ERROR: Could not write %s\n", path);
     }
 }
 
