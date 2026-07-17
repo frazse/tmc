@@ -22,9 +22,9 @@
         android:supportsRtl="true"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         <activity
-            android:name="com.matheovignaud.tmc.RomPickerActivity"
+            android:name="com.matheovignaud.tmc.LauncherActivity"
             android:exported="true"
-            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+            android:theme="@android:style/Theme.DeviceDefault" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -40,12 +40,12 @@
 23-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:15:9-67
 24        <activity
 24-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:17:9-25:20
-25            android:name="com.matheovignaud.tmc.RomPickerActivity"
-25-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:18:13-46
+25            android:name="com.matheovignaud.tmc.LauncherActivity"
+25-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:18:13-45
 26            android:exported="true"
 26-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:19:13-36
-27            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
-27-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:20:13-71
+27            android:theme="@android:style/Theme.DeviceDefault" >
+27-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:20:13-63
 28            <intent-filter>
 28-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:21:13-24:29
 29                <action android:name="android.intent.action.MAIN" />

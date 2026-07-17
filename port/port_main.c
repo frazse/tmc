@@ -309,6 +309,19 @@ int main(int argc, char* argv[]) {
                     fprintf(stderr, "Invalid window scale '%s'. Must be an integer between 1 and 10.\n", valueStr);
                 }
             }
+            else if (strcmp(argv[i], "--internal_scale=") == 0 || strncmp(argv[i], "--internal_scale=", 17) == 0) {
+                const char* valueStr = argv[i] + 17;
+                int value = atoi(valueStr);
+                if (value >= 1 && value <= 4) {
+                    Port_Config_SetInternalScale((uint8_t)value);
+                } else {
+                    fprintf(stderr, "Invalid internal scale '%s'. Must be an integer between 1 and 4.\n", valueStr);
+                }
+            }
+            else if (strcmp(argv[i], "--upscale_method=") == 0 || strncmp(argv[i], "--upscale_method=", 17) == 0) {
+                const char* valueStr = argv[i] + 17;
+                Port_Config_SetUpscaleMethod(valueStr);
+            }
             else if (strcmp(argv[i], "--loose-assets") == 0) {
                 Port_LooseAssetsRequested = 1;
             }

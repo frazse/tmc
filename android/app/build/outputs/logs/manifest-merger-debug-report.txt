@@ -42,14 +42,14 @@ INJECTED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:9:5-32:
 		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:10:9-35
 	android:theme
 		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:15:9-67
-activity#com.matheovignaud.tmc.RomPickerActivity
+activity#com.matheovignaud.tmc.LauncherActivity
 ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:17:9-25:20
 	android:exported
 		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:19:13-36
 	android:theme
-		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:20:13-71
+		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:20:13-63
 	android:name
-		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:18:13-46
+		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:18:13-45
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
 ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:21:13-24:29
 action#android.intent.action.MAIN

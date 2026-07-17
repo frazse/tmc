@@ -66,6 +66,10 @@ static void FlushEepromFile(void) {
     }
 }
 
+void Port_Save_Flush(void) {
+    FlushEepromFile();
+}
+
 /* ---- EEPROM BIOS API ---------------------------------------------------- */
 
 u16 EEPROMConfigure(u16 type) {
@@ -97,11 +101,17 @@ u16 EEPROMWrite0_8k_Check(u16 block, const u16* src) {
     if (block >= EEPROM_BLOCKS)
         return 0x80FF; /* EEPROM_OUT_OF_RANGE */
 
+    if (memcmp(&sEeprom[block * EEPROM_BLOCK], src, EEPROM_BLOCK) == 0) {
+        return 0; /* no change */
+    }
+
     memcpy(&sEeprom[block * EEPROM_BLOCK], src, EEPROM_BLOCK);
     sEepromDirty = 1;
 
+#ifndef __ANDROID__
     /* Flush to disk immediately to avoid data loss on crash */
     FlushEepromFile();
+#endif
     return 0; /* success */
 }
 

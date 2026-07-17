@@ -5,7 +5,7 @@
 -- Platform: Android-1
 -- 64-bit:   TRUE
 -- Compiler: /home/azu/Android/Sdk/ndk/30.0.14904198/toolchains/llvm/prebuilt/linux-x86_64/bin/clang
--- Revision: SDL-3.5.0-6eba2f2
+-- Revision: SDL-3.5.0-HEAD-HASH-NOTFOUND
 -- Vendor:   
 -- 
 -- Subsystems:

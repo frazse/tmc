@@ -288,15 +288,8 @@ static int LoadExtractedPages(void) {
 /*  ROM access logging — now also extracts the touched page           */
 /* ------------------------------------------------------------------ */
 void Port_LogRomAccess(u32 gba_addr, const char* caller) {
-    if (gba_addr < 0x08000000u)
-        return;
-    u32 offset = gba_addr - 0x08000000u;
-    u32 page = offset >> ROM_PAGE_SHIFT;
-    if (page < ROM_MAX_PAGES && !IsPageExtracted(page)) {
-        fprintf(stderr, "[ROM] New page %08X accessed from %s\n", page << ROM_PAGE_SHIFT, caller ? caller : "?");
-        fflush(stderr);
-    }
-    ExtractPage(page);
+    (void)gba_addr;
+    (void)caller;
 }
 
 void Port_PrintRomAccessSummary(void) {

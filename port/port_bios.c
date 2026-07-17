@@ -201,8 +201,14 @@ static u64 lastFrameNs = 0;
 static u64 sFpsWindowStartNs = 0;
 static u32 sFpsFrameCount = 0;
 
+extern void Port_Save_Flush(void);
+
 void VBlankIntrWait(void) {
     u64 nowNs;
+
+#ifdef __ANDROID__
+    Port_Save_Flush();
+#endif
 
     /* Toggle VSync based on whether we're trying to run faster than the
      * display refresh: fast-forward, or a target FPS preset > 60. With

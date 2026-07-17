@@ -1114,13 +1114,13 @@ bool EnsureAssetGroupCache() {
         const std::filesystem::path runtimeRoot = RuntimeRootForEditableRoot(*editableRoot);
         std::string buildInfo;
         if (!PortAssetPipeline::EnsureRuntimeAssetsBuilt(*editableRoot, runtimeRoot, &buildInfo)) {
-            SDL_Log("[ASSET] Failed to build runtime assets from %s: %s",
+            std::fprintf(stderr, "[ASSET] Failed to build runtime assets from %s: %s\n",
                          editableRoot->string().c_str(), buildInfo.c_str());
             return false;
         }
 
         if (!buildInfo.empty()) {
-            SDL_Log("[ASSET] Rebuilt runtime assets from %s (%s)", editableRoot->string().c_str(),
+            std::fprintf(stderr, "[ASSET] Rebuilt runtime assets from %s (%s)\n", editableRoot->string().c_str(),
                          buildInfo.c_str());
         }
 
@@ -1130,11 +1130,8 @@ bool EnsureAssetGroupCache() {
     }
 
     if (!assetsRoot.has_value()) {
-        SDL_Log("[ASSET] No runtime assets root found in any search path.");
         return false;
     }
-
-    SDL_Log("[ASSET] Found assets root: %s", assetsRoot->string().c_str());
 
     nlohmann::json gfxGroupsJson;
     nlohmann::json paletteGroupsJson;
@@ -1155,7 +1152,6 @@ bool EnsureAssetGroupCache() {
         !LoadOptionalJson(*assetsRoot / "area_tiles.json", areaTilesJson) ||
         !LoadOptionalJson(*assetsRoot / "sprite_ptrs.json", spritePtrsJson) ||
         !LoadOptionalJson(*assetsRoot / "texts.json", textsJson)) {
-        SDL_Log("[ASSET] Failed to load essential JSON manifests from %s", assetsRoot->string().c_str());
         return false;
     }
 

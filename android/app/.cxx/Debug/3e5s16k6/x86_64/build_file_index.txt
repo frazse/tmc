@@ -3,7 +3,6 @@
 /home/azu/git/tmc/android/app/src/main/jni/SDL/cmake/3rdparty.cmake
 /home/azu/git/tmc/android/app/src/main/jni/SDL/cmake/FindLibUSB.cmake
 /home/azu/git/tmc/android/app/src/main/jni/SDL/cmake/GetGitRevisionDescription.cmake
-/home/azu/git/tmc/android/app/src/main/jni/SDL/cmake/GetGitRevisionDescription.cmake.in
 /home/azu/git/tmc/android/app/src/main/jni/SDL/cmake/PreseedDOSCache.cmake
 /home/azu/git/tmc/android/app/src/main/jni/SDL/cmake/PreseedEmscriptenCache.cmake
 /home/azu/git/tmc/android/app/src/main/jni/SDL/cmake/PreseedHaikuCache.cmake

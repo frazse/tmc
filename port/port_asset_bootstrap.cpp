@@ -458,12 +458,10 @@ extern "C" void Port_EnsureAssetsReadyWithDisplay(SDL_Window* window,
                                                   const u8* rom_data,
                                                   u32 rom_size) {
     const std::filesystem::path root = PreferredAssetRoot();
-    SDL_Log("Port_EnsureAssetsReadyWithDisplay: root=%s", root.string().c_str());
     const std::filesystem::path assets = root / "assets";
     const std::filesystem::path rom = root / "baserom.gba";
 
     if (std::filesystem::exists(assets / "gfx.pak")) {
-        SDL_Log("Assets already extracted. Mounting PAKs.");
         MountPaksForRoot(root);
         Port_AssetLoader_Reload();
         Port_LoadTextsFromAssets();
