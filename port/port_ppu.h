@@ -14,6 +14,9 @@ void Port_SetBootstrapWindow(SDL_Window* window);
 // Initialize the PPU renderer (call after SDL_CreateWindow)
 void Port_PPU_Init(SDL_Window* window);
 
+// Set a secondary window for dual-screen support (e.g. for touch controls on a second screen).
+void Port_PPU_SetSecondaryWindow(SDL_Window* window);
+
 // Read GBA DISPCNT mode bits and render the current frame via ViruaPPU,
 // then present it to the SDL window. Call once per VBlank.
 void Port_PPU_PresentFrame(void);

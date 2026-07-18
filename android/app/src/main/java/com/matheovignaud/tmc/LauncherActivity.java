@@ -59,6 +59,7 @@ public class LauncherActivity extends Activity {
     }
 
     private void launchGame() {
+        android.util.Log.d("TMC", "launchGame() button pressed");
         // Save current selections
         mPrefs.edit()
             .putInt("window_scale", mWindowScaleSpinner.getSelectedItemPosition() + 1)

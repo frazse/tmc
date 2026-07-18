@@ -27,13 +27,13 @@
 			{
 				"command" : 0,
 				"file" : 0,
-				"line" : 111,
+				"line" : 112,
 				"parent" : 0
 			},
 			{
 				"command" : 1,
 				"file" : 0,
-				"line" : 113,
+				"line" : 114,
 				"parent" : 0
 			},
 			{
@@ -181,7 +181,6 @@
 				30,
 				31,
 				32,
-				34,
 				35,
 				36,
 				37,
@@ -189,7 +188,7 @@
 				39,
 				40,
 				41,
-				43,
+				42,
 				44,
 				45,
 				46,
@@ -198,7 +197,7 @@
 				49,
 				50,
 				51,
-				68,
+				52,
 				69,
 				70,
 				71,
@@ -814,7 +813,8 @@
 				681,
 				682,
 				683,
-				684
+				684,
+				685
 			],
 			"sysroot" : 
 			{
@@ -928,8 +928,8 @@
 				16,
 				17,
 				33,
-				42,
-				52,
+				34,
+				43,
 				53,
 				54,
 				55,
@@ -944,7 +944,8 @@
 				64,
 				65,
 				66,
-				67
+				67,
+				68
 			],
 			"sysroot" : 
 			{
@@ -1696,7 +1697,8 @@
 				681,
 				682,
 				683,
-				684
+				684,
+				685
 			]
 		}
 	],
@@ -1904,6 +1906,12 @@
 			"backtrace" : 1,
 			"compileGroupIndex" : 1,
 			"path" : "/home/azu/git/tmc/port/port_touch_controls.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"compileGroupIndex" : 1,
+			"path" : "/home/azu/git/tmc/port/port_android_jni.cpp",
 			"sourceGroupIndex" : 0
 		},
 		{

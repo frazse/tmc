@@ -6,6 +6,7 @@
 #include <cmath>
 #include <cstdint>
 #include <vector>
+#include <mutex>
 
 #ifdef __ANDROID__
 
@@ -53,7 +54,9 @@ bool IsDpadScheme() {
 }
 
 bool sVisible = true;
+static SDL_Window* sTargetWindow = nullptr;
 std::vector<TouchPoint> sTouches;
+static std::mutex sTouchMutex;
 std::array<bool, PORT_INPUT_COUNT> sHeld{};
 int sLastWindowW = 0;
 int sLastWindowH = 0;
@@ -397,6 +400,7 @@ void UpdateJoystickInput(const JoyGeom& g) {
 }
 
 void UpdateHeldState() {
+    std::lock_guard<std::mutex> lock(sTouchMutex);
     sHeld.fill(false);
     if (!sVisible || sLastWindowW <= 0 || sLastWindowH <= 0) {
         return;
@@ -427,15 +431,18 @@ void UpdateHeldState() {
 
 void UpsertTouch(int64_t id, float x, float y) {
     sVisible = true;
-    for (TouchPoint& touch : sTouches) {
-        if (touch.id == id) {
-            touch.x = x;
-            touch.y = y;
-            UpdateHeldState();
-            return;
+    {
+        std::lock_guard<std::mutex> lock(sTouchMutex);
+        for (TouchPoint& touch : sTouches) {
+            if (touch.id == id) {
+                touch.x = x;
+                touch.y = y;
+                goto finish;
+            }
         }
+        sTouches.push_back({id, x, y});
     }
-    sTouches.push_back({id, x, y});
+finish:
     UpdateHeldState();
 }
 
@@ -443,9 +450,14 @@ void RemoveTouch(int64_t id) {
     if (sJoyActive && id == sJoyFinger) {
         ClearJoystick();
     }
-    sTouches.erase(std::remove_if(sTouches.begin(), sTouches.end(),
-                                  [id](const TouchPoint& touch) { return touch.id == id; }),
-                   sTouches.end());
+    {
+        std::lock_guard<std::mutex> lock(sTouchMutex);
+        auto it = std::remove_if(sTouches.begin(), sTouches.end(),
+                                 [id](const TouchPoint& touch) { return touch.id == id; });
+        if (it != sTouches.end()) {
+            sTouches.erase(it, sTouches.end());
+        }
+    }
     UpdateHeldState();
 }
 
@@ -605,9 +617,41 @@ extern "C" void Port_TouchControls_NotifyRenderSize(int width, int height) {
     }
 }
 
+extern "C" void Port_TouchControls_SetTargetWindow(SDL_Window* window) {
+    sTargetWindow = window;
+}
+
+extern "C" void Port_TouchControls_HandleSecondaryEvent(int action, float x, float y, int pointerId) {
+    // Offset IDs from JNI to avoid conflict with SDL IDs
+    int64_t fid = 1000 + pointerId;
+    if (action == 0 || action == 5) { // ACTION_DOWN or ACTION_POINTER_DOWN
+        UpsertTouch(fid, x, y);
+        TryAssignJoystick(fid, x, y);
+    } else if (action == 2) { // ACTION_MOVE
+        UpsertTouch(fid, x, y);
+    } else if (action == 1 || action == 6 || action == 3) { // ACTION_UP, ACTION_POINTER_UP, ACTION_CANCEL
+        RemoveTouch(fid);
+    }
+}
+
 extern "C" void Port_TouchControls_HandleEvent(const SDL_Event* event) {
     if (event == nullptr) {
         return;
+    }
+
+    // If we have a dedicated secondary window, ignore ALL touch/mouse events
+    // that don't belong to it. This prevents the top screen from triggering things.
+    if (sTargetWindow) {
+        Uint32 winId = 0;
+        if (event->type == SDL_EVENT_FINGER_DOWN || event->type == SDL_EVENT_FINGER_UP || event->type == SDL_EVENT_FINGER_MOTION) {
+            winId = event->tfinger.windowID;
+        } else if (event->type == SDL_EVENT_MOUSE_BUTTON_DOWN || event->type == SDL_EVENT_MOUSE_BUTTON_UP || event->type == SDL_EVENT_MOUSE_MOTION) {
+            winId = event->button.windowID;
+        }
+
+        if (winId != 0 && winId != SDL_GetWindowID(sTargetWindow)) {
+            return;
+        }
     }
 
     if (event->type == SDL_EVENT_FINGER_DOWN) {
@@ -619,13 +663,23 @@ extern "C" void Port_TouchControls_HandleEvent(const SDL_Event* event) {
         TryAssignJoystick(fid, x, y);
         UpdateHeldState();
     } else if (event->type == SDL_EVENT_FINGER_MOTION) {
+        if (sTargetWindow && event->tfinger.windowID != SDL_GetWindowID(sTargetWindow)) {
+            return;
+        }
         UpsertTouch(static_cast<int64_t>(event->tfinger.fingerID),
                     event->tfinger.x * static_cast<float>(sLastWindowW),
                     event->tfinger.y * static_cast<float>(sLastWindowH));
     } else if (event->type == SDL_EVENT_FINGER_UP || event->type == SDL_EVENT_FINGER_CANCELED) {
+        if (sTargetWindow && event->tfinger.windowID != SDL_GetWindowID(sTargetWindow)) {
+            // Finger might have started on another window, but we should probably remove it anyway if we track it?
+            // Actually SDL finger IDs are global per display usually.
+        }
         RemoveTouch(static_cast<int64_t>(event->tfinger.fingerID));
     } else if (event->type == SDL_EVENT_MOUSE_BUTTON_DOWN &&
                event->button.button == SDL_BUTTON_LEFT) {
+        if (sTargetWindow && event->button.windowID != SDL_GetWindowID(sTargetWindow)) {
+            return;
+        }
         const float x = event->button.x;
         const float y = event->button.y;
         TryTriggerSettings(x, y);
@@ -634,9 +688,15 @@ extern "C" void Port_TouchControls_HandleEvent(const SDL_Event* event) {
         UpdateHeldState();
     } else if (event->type == SDL_EVENT_MOUSE_MOTION &&
                (event->motion.state & SDL_BUTTON_LMASK) != 0) {
+        if (sTargetWindow && event->motion.windowID != SDL_GetWindowID(sTargetWindow)) {
+            return;
+        }
         UpsertTouch(-1, event->motion.x, event->motion.y);
     } else if (event->type == SDL_EVENT_MOUSE_BUTTON_UP &&
                event->button.button == SDL_BUTTON_LEFT) {
+        if (sTargetWindow && event->button.windowID != SDL_GetWindowID(sTargetWindow)) {
+            return;
+        }
         RemoveTouch(-1);
     }
 }

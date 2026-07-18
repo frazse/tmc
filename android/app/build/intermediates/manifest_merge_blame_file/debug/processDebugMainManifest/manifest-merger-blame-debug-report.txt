@@ -22,7 +22,7 @@
 13-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:7:22-78
 14
 15    <application
-15-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:9:5-32:19
+15-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:9:5-43:19
 16        android:allowBackup="true"
 16-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:10:9-35
 17        android:debuggable="true"
@@ -38,34 +38,56 @@
 22-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:14:9-35
 23        android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
 23-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:15:9-67
-24        <activity
-24-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:17:9-25:20
-25            android:name="com.matheovignaud.tmc.LauncherActivity"
-25-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:18:13-45
-26            android:exported="true"
-26-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:19:13-36
-27            android:theme="@android:style/Theme.DeviceDefault" >
-27-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:20:13-63
-28            <intent-filter>
-28-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:21:13-24:29
-29                <action android:name="android.intent.action.MAIN" />
-29-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:22:17-69
-29-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:22:25-66
-30
-31                <category android:name="android.intent.category.LAUNCHER" />
-31-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:23:17-77
-31-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:23:27-74
-32            </intent-filter>
-33        </activity>
-34        <activity
-34-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:27:9-31:20
-35            android:name="com.matheovignaud.tmc.TmcActivity"
-35-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:28:13-40
-36            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout"
-36-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:29:13-87
-37            android:exported="true" >
-37-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:30:13-36
-38        </activity>
-39    </application>
-40
-41</manifest>
+24        <meta-data
+24-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:17:9-100
+25            android:name="android.allow_multiple_resumed_activities"
+25-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:17:20-76
+26            android:value="true" />
+26-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:17:77-97
+27
+28        <activity
+28-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:19:9-27:20
+29            android:name="com.matheovignaud.tmc.LauncherActivity"
+29-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:20:13-45
+30            android:exported="true"
+30-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:21:13-36
+31            android:theme="@android:style/Theme.DeviceDefault" >
+31-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:22:13-63
+32            <intent-filter>
+32-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:23:13-26:29
+33                <action android:name="android.intent.action.MAIN" />
+33-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:24:17-69
+33-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:24:25-66
+34
+35                <category android:name="android.intent.category.LAUNCHER" />
+35-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:25:17-77
+35-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:25:27-74
+36            </intent-filter>
+37        </activity>
+38        <activity
+38-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:29:9-34:20
+39            android:name="com.matheovignaud.tmc.TmcActivity"
+39-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:30:13-40
+40            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout"
+40-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:31:13-87
+41            android:exported="true"
+41-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:33:13-36
+42            android:launchMode="singleInstance" >
+42-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:32:13-48
+43        </activity>
+44        <activity
+44-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:36:9-42:20
+45            android:name="com.matheovignaud.tmc.TmcTouchActivity"
+45-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:37:13-45
+46            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout"
+46-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:38:13-87
+47            android:exported="false"
+47-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:41:13-37
+48            android:launchMode="singleInstance"
+48-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:40:13-48
+49            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+49-->/home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:39:13-71
+50        </activity>
+51    </application>
+52
+53</manifest>

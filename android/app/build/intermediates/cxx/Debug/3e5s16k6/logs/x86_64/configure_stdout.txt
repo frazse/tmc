@@ -1,3 +1,4 @@
+-- Found PkgConfig: /usr/bin/pkg-config (found version "3.0.3") 
 -- Could NOT find LibUSB (missing: LibUSB_LIBRARY LibUSB_INCLUDE_PATH) (found version "LibUSB_VERSION-NOTFOUND")
 -- 
 -- SDL3 was configured with the following options:

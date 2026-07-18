@@ -78,28 +78,28 @@
 				{
 					"directoryIndex" : 1,
 					"id" : "SDL3-shared::@e7c329919722962a2ad4",
-					"jsonFile" : "target-SDL3-shared-Debug-6fd75dbd1f024c0f7b63.json",
+					"jsonFile" : "target-SDL3-shared-Debug-6877e1ce74f37dfa672d.json",
 					"name" : "SDL3-shared",
 					"projectIndex" : 1
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "SDL3_test::@e7c329919722962a2ad4",
-					"jsonFile" : "target-SDL3_test-Debug-d8b28db25f32e306ad40.json",
+					"jsonFile" : "target-SDL3_test-Debug-fad9e55473024c6576fc.json",
 					"name" : "SDL3_test",
 					"projectIndex" : 1
 				},
 				{
 					"directoryIndex" : 1,
 					"id" : "SDL_uclibc::@e7c329919722962a2ad4",
-					"jsonFile" : "target-SDL_uclibc-Debug-d8c8a3c61fad2de47c83.json",
+					"jsonFile" : "target-SDL_uclibc-Debug-e0d76cdd2328da76b37c.json",
 					"name" : "SDL_uclibc",
 					"projectIndex" : 1
 				},
 				{
 					"directoryIndex" : 0,
 					"id" : "main::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-main-Debug-d5f0954be670530d4703.json",
+					"jsonFile" : "target-main-Debug-62d698bac9594b655495.json",
 					"name" : "main",
 					"projectIndex" : 0
 				}
@@ -109,7 +109,7 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/x86_64",
+		"build" : "/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/arm64-v8a",
 		"source" : "/home/azu/git/tmc/android/app/src/main/jni"
 	},
 	"version" : 

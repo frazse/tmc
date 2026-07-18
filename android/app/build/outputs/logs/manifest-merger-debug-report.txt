@@ -1,9 +1,9 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:2:1-34:12
-INJECTED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:2:1-34:12
-INJECTED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:2:1-34:12
-INJECTED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:2:1-34:12
+ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:2:1-45:12
+INJECTED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:2:1-45:12
+INJECTED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:2:1-45:12
+INJECTED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:2:1-45:12
 	package
 		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:3:5-36
 		INJECTED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml
@@ -26,8 +26,8 @@ ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:7:5-81
 	android:name
 		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:7:22-78
 application
-ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:9:5-32:19
-INJECTED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:9:5-32:19
+ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:9:5-43:19
+INJECTED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:9:5-43:19
 	android:extractNativeLibs
 		INJECTED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml
 	android:supportsRtl
@@ -42,32 +42,52 @@ INJECTED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:9:5-32:
 		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:10:9-35
 	android:theme
 		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:15:9-67
+meta-data#android.allow_multiple_resumed_activities
+ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:17:9-100
+	android:value
+		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:17:77-97
+	android:name
+		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:17:20-76
 activity#com.matheovignaud.tmc.LauncherActivity
-ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:17:9-25:20
+ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:19:9-27:20
 	android:exported
-		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:19:13-36
+		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:21:13-36
 	android:theme
-		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:20:13-63
+		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:22:13-63
 	android:name
-		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:18:13-45
+		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:20:13-45
 intent-filter#action:name:android.intent.action.MAIN+category:name:android.intent.category.LAUNCHER
-ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:21:13-24:29
+ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:23:13-26:29
 action#android.intent.action.MAIN
-ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:22:17-69
+ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:24:17-69
 	android:name
-		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:22:25-66
+		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:24:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:23:17-77
+ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:25:17-77
 	android:name
-		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:23:27-74
+		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:25:27-74
 activity#com.matheovignaud.tmc.TmcActivity
-ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:27:9-31:20
+ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:29:9-34:20
+	android:launchMode
+		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:32:13-48
 	android:exported
-		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:30:13-36
+		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:33:13-36
 	android:configChanges
-		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:29:13-87
+		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:31:13-87
 	android:name
-		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:28:13-40
+		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:30:13-40
+activity#com.matheovignaud.tmc.TmcTouchActivity
+ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:36:9-42:20
+	android:launchMode
+		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:40:13-48
+	android:exported
+		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:41:13-37
+	android:configChanges
+		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:38:13-87
+	android:theme
+		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:39:13-71
+	android:name
+		ADDED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml:37:13-45
 uses-sdk
 INJECTED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /home/azu/git/tmc/android/app/src/main/AndroidManifest.xml

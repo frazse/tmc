@@ -9,6 +9,7 @@
 #include "port_audio.h"
 #include "port_gba_mem.h"
 #include "port_ppu.h"
+#include "port_touch_controls.h"
 #include "port_rom.h"
 #include "port_runtime_config.h"
 #include "port_types.h"
@@ -32,6 +33,7 @@
 #endif
 
 static bool Port_TryInitVideo(const char* videoDriver, const char* renderDriver, bool headless) {
+    SDL_SetHint(SDL_HINT_ANDROID_BLOCK_ON_PAUSE, "0");
     if (videoDriver) {
         SDL_SetHint(SDL_HINT_VIDEO_DRIVER, videoDriver);
     } else {
@@ -347,6 +349,11 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
+#ifdef __ANDROID__
+    extern void Port_Android_RequestSecondaryDisplay(void);
+    // Port_Android_RequestSecondaryDisplay();
+#endif
+
     Port_Config_OpenGamepads();
 
     /* Pre-window ROM presence check: bail out with a message box BEFORE
@@ -383,15 +390,19 @@ int main(int argc, char* argv[]) {
 #ifdef __ANDROID__
     window_flags |= SDL_WINDOW_FULLSCREEN;
 #endif
-    if (!SDL_CreateWindowAndRenderer(
-            "The Minish Cap",
-            240 * window_scale, 160 * window_scale,
-            window_flags,
-            &window, &prerenderer)) {
-        fprintf(stderr, "SDL_CreateWindowAndRenderer Error: %s\n", SDL_GetError());
-        SDL_Quit();
-        return 1;
+
+    if (!window) {
+        if (!SDL_CreateWindowAndRenderer(
+                "The Minish Cap",
+                240 * window_scale, 160 * window_scale,
+                window_flags,
+                &window, &prerenderer)) {
+            fprintf(stderr, "SDL_CreateWindowAndRenderer Error: %s\n", SDL_GetError());
+            SDL_Quit();
+            return 1;
+        }
     }
+
     (void)prerenderer; /* Owned by the window; retrieved via SDL_GetRenderer(window) later. */
 
     SDL_ShowWindow(window);

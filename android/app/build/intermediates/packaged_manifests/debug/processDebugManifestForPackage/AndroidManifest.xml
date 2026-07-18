@@ -21,6 +21,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
+        <meta-data
+            android:name="android.allow_multiple_resumed_activities"
+            android:value="true" />
+
         <activity
             android:name="com.matheovignaud.tmc.LauncherActivity"
             android:exported="true"
@@ -34,7 +38,15 @@
         <activity
             android:name="com.matheovignaud.tmc.TmcActivity"
             android:configChanges="orientation|keyboardHidden|screenSize|screenLayout"
-            android:exported="true" >
+            android:exported="true"
+            android:launchMode="singleInstance" >
+        </activity>
+        <activity
+            android:name="com.matheovignaud.tmc.TmcTouchActivity"
+            android:configChanges="orientation|keyboardHidden|screenSize|screenLayout"
+            android:exported="false"
+            android:launchMode="singleInstance"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" >
         </activity>
     </application>
 

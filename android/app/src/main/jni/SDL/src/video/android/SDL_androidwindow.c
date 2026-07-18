@@ -40,28 +40,40 @@ bool Android_CreateWindow(SDL_VideoDevice *_this, SDL_Window *window, SDL_Proper
 {
     SDL_WindowData *data;
     bool result = true;
+    ANativeWindow* secondary = (ANativeWindow*)SDL_GetPointerProperty(SDL_GetGlobalProperties(), "TMC.secondary_native_window", NULL);
 
     if (!Android_WaitActiveAndLockActivity()) {
         return false;
     }
 
-    if (Android_Window) {
+    if (Android_Window && secondary == NULL) {
         result = SDL_SetError("Android only supports one window");
         goto endfunction;
     }
 
     // Set orientation
-    Android_JNI_SetOrientation(window->w, window->h, window->flags & SDL_WINDOW_RESIZABLE, SDL_GetHint(SDL_HINT_ORIENTATIONS));
+    if (Android_Window == NULL) {
+        Android_JNI_SetOrientation(window->w, window->h, window->flags & SDL_WINDOW_RESIZABLE, SDL_GetHint(SDL_HINT_ORIENTATIONS));
+    }
 
     // Adjust the window data to match the screen
-    window->x = 0;
-    window->y = 0;
-    window->w = Android_SurfaceWidth;
-    window->h = Android_SurfaceHeight;
+    if (secondary) {
+        window->x = 0;
+        window->y = 0;
+        window->w = ANativeWindow_getWidth(secondary);
+        window->h = ANativeWindow_getHeight(secondary);
+    } else {
+        window->x = 0;
+        window->y = 0;
+        window->w = Android_SurfaceWidth;
+        window->h = Android_SurfaceHeight;
+    }
 
     // One window, it always has focus
-    SDL_SetMouseFocus(window);
-    SDL_SetKeyboardFocus(window);
+    if (Android_Window == NULL) {
+        SDL_SetMouseFocus(window);
+        SDL_SetKeyboardFocus(window);
+    }
 
     data = (SDL_WindowData *)SDL_calloc(1, sizeof(*data));
     if (!data) {
@@ -69,7 +81,10 @@ bool Android_CreateWindow(SDL_VideoDevice *_this, SDL_Window *window, SDL_Proper
         goto endfunction;
     }
 
-    data->native_window = Android_JNI_GetNativeWindow();
+    data->native_window = secondary;
+    if (!data->native_window) {
+        data->native_window = Android_JNI_GetNativeWindow();
+    }
     if (!data->native_window) {
         SDL_free(data);
         result = SDL_SetError("Could not fetch native window");
@@ -96,7 +111,9 @@ bool Android_CreateWindow(SDL_VideoDevice *_this, SDL_Window *window, SDL_Proper
     SDL_SetWindowSafeAreaInsets(window, Android_SafeInsetLeft, Android_SafeInsetRight, Android_SafeInsetTop, Android_SafeInsetBottom);
 
     window->internal = data;
-    Android_Window = window;
+    if (Android_Window == NULL) {
+        Android_Window = window;
+    }
 
 endfunction:
 
@@ -147,11 +164,9 @@ SDL_FullscreenResult Android_SetWindowFullscreen(SDL_VideoDevice *_this, SDL_Win
         new_w = ANativeWindow_getWidth(data->native_window);
         new_h = ANativeWindow_getHeight(data->native_window);
 
-        if (new_w < 0 || new_h < 0) {
-            SDL_SetError("ANativeWindow_getWidth/Height() fails");
-        }
-
-        if (old_w != new_w || old_h != new_h) {
+        if (new_w != old_w || new_h != old_h) {
+            window->w = new_w;
+            window->h = new_h;
             SDL_SendWindowEvent(window, SDL_EVENT_WINDOW_RESIZED, new_w, new_h);
         }
     }
@@ -165,7 +180,13 @@ endfunction:
 
 void Android_MinimizeWindow(SDL_VideoDevice *_this, SDL_Window *window)
 {
-    Android_JNI_MinimizeWindow();
+    Android_LockActivityMutex();
+
+    if (window == Android_Window) {
+        Android_JNI_MinimizeWindow();
+    }
+
+    Android_UnlockActivityMutex();
 }
 
 void Android_SetWindowResizable(SDL_VideoDevice *_this, SDL_Window *window, bool resizable)
@@ -201,4 +222,4 @@ void Android_DestroyWindow(SDL_VideoDevice *_this, SDL_Window *window)
     Android_UnlockActivityMutex();
 }
 
-#endif // SDL_VIDEO_DRIVER_ANDROID
+#endif /* SDL_VIDEO_DRIVER_ANDROID */

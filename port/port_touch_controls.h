@@ -9,9 +9,11 @@ extern "C" {
 #endif
 
 void Port_TouchControls_HandleEvent(const SDL_Event* event);
+void Port_TouchControls_HandleSecondaryEvent(int action, float x, float y, int pointerId);
 void Port_TouchControls_NotifyRenderSize(int width, int height);
 void Port_TouchControls_NotifyGamepadUsed(void);
 void Port_TouchControls_SetGamepadAvailable(bool available);
+void Port_TouchControls_SetTargetWindow(SDL_Window* window);
 bool Port_TouchControls_InputPressed(PortInput input);
 void Port_TouchControls_Render(SDL_Renderer* renderer, int windowWidth, int windowHeight);
 

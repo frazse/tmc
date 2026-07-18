@@ -11,7 +11,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "x86_64"
+			"value" : "arm64-v8a"
 		},
 		{
 			"name" : "ANDROID_NDK",
@@ -75,7 +75,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "x86_64"
+			"value" : "arm64-v8a"
 		},
 		{
 			"name" : "CMAKE_ANDROID_NDK",
@@ -163,7 +163,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/x86_64"
+			"value" : "/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/arm64-v8a"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -975,7 +975,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "/home/azu/git/tmc/android/app/build/intermediates/cxx/Debug/3e5s16k6/obj/x86_64"
+			"value" : "/home/azu/git/tmc/android/app/build/intermediates/cxx/Debug/3e5s16k6/obj/arm64-v8a"
 		},
 		{
 			"name" : "CMAKE_LINKER",
@@ -1307,7 +1307,7 @@
 				}
 			],
 			"type" : "UNINITIALIZED",
-			"value" : "/home/azu/git/tmc/android/app/build/intermediates/cxx/Debug/3e5s16k6/obj/x86_64"
+			"value" : "/home/azu/git/tmc/android/app/build/intermediates/cxx/Debug/3e5s16k6/obj/arm64-v8a"
 		},
 		{
 			"name" : "CMAKE_SHARED_LINKER_FLAGS",
@@ -1594,36 +1594,24 @@
 			"value" : "1"
 		},
 		{
-			"name" : "COMPILER_SUPPORTS_AVX",
+			"name" : "COMPILER_SUPPORTS_ARMNEON",
 			"properties" : 
 			[
 				{
 					"name" : "HELPSTRING",
-					"value" : "Test COMPILER_SUPPORTS_AVX"
+					"value" : "Test COMPILER_SUPPORTS_ARMNEON"
 				}
 			],
 			"type" : "INTERNAL",
 			"value" : "1"
 		},
 		{
-			"name" : "COMPILER_SUPPORTS_AVX2",
+			"name" : "COMPILER_SUPPORTS_ARMSVE2",
 			"properties" : 
 			[
 				{
 					"name" : "HELPSTRING",
-					"value" : "Test COMPILER_SUPPORTS_AVX2"
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "1"
-		},
-		{
-			"name" : "COMPILER_SUPPORTS_AVX512F",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Test COMPILER_SUPPORTS_AVX512F"
+					"value" : "Test COMPILER_SUPPORTS_ARMSVE2"
 				}
 			],
 			"type" : "INTERNAL",
@@ -1654,78 +1642,6 @@
 			"value" : "1"
 		},
 		{
-			"name" : "COMPILER_SUPPORTS_MMX",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Test COMPILER_SUPPORTS_MMX"
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "1"
-		},
-		{
-			"name" : "COMPILER_SUPPORTS_SSE",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Test COMPILER_SUPPORTS_SSE"
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "1"
-		},
-		{
-			"name" : "COMPILER_SUPPORTS_SSE2",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Test COMPILER_SUPPORTS_SSE2"
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "1"
-		},
-		{
-			"name" : "COMPILER_SUPPORTS_SSE3",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Test COMPILER_SUPPORTS_SSE3"
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "1"
-		},
-		{
-			"name" : "COMPILER_SUPPORTS_SSE4_1",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Test COMPILER_SUPPORTS_SSE4_1"
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "1"
-		},
-		{
-			"name" : "COMPILER_SUPPORTS_SSE4_2",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Test COMPILER_SUPPORTS_SSE4_2"
-				}
-			],
-			"type" : "INTERNAL",
-			"value" : "1"
-		},
-		{
 			"name" : "FIND_PACKAGE_MESSAGE_DETAILS_PkgConfig",
 			"properties" : 
 			[
@@ -1735,7 +1651,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "[/usr/bin/pkg-config][v2.5.1()]"
+			"value" : "[/usr/bin/pkg-config][v3.0.3()]"
 		},
 		{
 			"name" : "GIT_EXECUTABLE",
@@ -4375,7 +4291,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/x86_64/SDL"
+			"value" : "/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/arm64-v8a/SDL"
 		},
 		{
 			"name" : "SDL3_IS_TOP_LEVEL",
@@ -4426,6 +4342,30 @@
 			"value" : "OFF"
 		},
 		{
+			"name" : "SDL_ARMNEON",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Use NEON assembly routines"
+				}
+			],
+			"type" : "BOOL",
+			"value" : "ON"
+		},
+		{
+			"name" : "SDL_ARMSVE2",
+			"properties" : 
+			[
+				{
+					"name" : "HELPSTRING",
+					"value" : "Use SVE2 assembly routines"
+				}
+			],
+			"type" : "BOOL",
+			"value" : "ON"
+		},
+		{
 			"name" : "SDL_ASAN",
 			"properties" : 
 			[
@@ -4468,42 +4408,6 @@
 				{
 					"name" : "HELPSTRING",
 					"value" : "Enable the Audio subsystem"
-				}
-			],
-			"type" : "BOOL",
-			"value" : "ON"
-		},
-		{
-			"name" : "SDL_AVX",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Use AVX assembly routines"
-				}
-			],
-			"type" : "BOOL",
-			"value" : "ON"
-		},
-		{
-			"name" : "SDL_AVX2",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Use AVX2 assembly routines"
-				}
-			],
-			"type" : "BOOL",
-			"value" : "ON"
-		},
-		{
-			"name" : "SDL_AVX512F",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Use AVX512F assembly routines"
 				}
 			],
 			"type" : "BOOL",
@@ -4639,7 +4543,7 @@
 				}
 			],
 			"type" : "BOOL",
-			"value" : "0"
+			"value" : "1"
 		},
 		{
 			"name" : "SDL_CPU_ARM64EC",
@@ -4771,7 +4675,7 @@
 				}
 			],
 			"type" : "BOOL",
-			"value" : "1"
+			"value" : "0"
 		},
 		{
 			"name" : "SDL_CPU_X86",
@@ -5074,18 +4978,6 @@
 			"value" : "OFF"
 		},
 		{
-			"name" : "SDL_MMX",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Use MMX assembly routines"
-				}
-			],
-			"type" : "BOOL",
-			"value" : "ON"
-		},
-		{
 			"name" : "SDL_NOTIFICATION",
 			"properties" : 
 			[
@@ -5288,66 +5180,6 @@
 			],
 			"type" : "BOOL",
 			"value" : "OFF"
-		},
-		{
-			"name" : "SDL_SSE",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Use SSE assembly routines"
-				}
-			],
-			"type" : "BOOL",
-			"value" : "ON"
-		},
-		{
-			"name" : "SDL_SSE2",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Use SSE2 assembly routines"
-				}
-			],
-			"type" : "BOOL",
-			"value" : "ON"
-		},
-		{
-			"name" : "SDL_SSE3",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Use SSE3 assembly routines"
-				}
-			],
-			"type" : "BOOL",
-			"value" : "ON"
-		},
-		{
-			"name" : "SDL_SSE4_1",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Use SSE4.1 assembly routines"
-				}
-			],
-			"type" : "BOOL",
-			"value" : "ON"
-		},
-		{
-			"name" : "SDL_SSE4_2",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Use SSE4.2 assembly routines"
-				}
-			],
-			"type" : "BOOL",
-			"value" : "ON"
 		},
 		{
 			"name" : "SDL_SYSTEM_ICONV",
@@ -5591,7 +5423,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/x86_64"
+			"value" : "/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/arm64-v8a"
 		},
 		{
 			"name" : "tmc_IS_TOP_LEVEL",

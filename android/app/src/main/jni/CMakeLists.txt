@@ -60,6 +60,7 @@ set(SOURCES
     ${TMC_ROOT}/port/port_save.c
     ${TMC_ROOT}/port/port_softslots.c
     ${TMC_ROOT}/port/port_touch_controls.cpp
+    ${TMC_ROOT}/port/port_android_jni.cpp
     ${TMC_ROOT}/port/port_filter.c
     ${TMC_ROOT}/port/port_animation.c
     ${TMC_ROOT}/port/port_math.c

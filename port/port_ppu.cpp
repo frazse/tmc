@@ -18,6 +18,14 @@
 #include <cstdlib>
 #include <cstring>
 
+#ifdef __ANDROID__
+#include <android/native_window.h>
+#include <android/log.h>
+#define LOG_PPU(...) __android_log_print(ANDROID_LOG_DEBUG, "TMC_PPU", __VA_ARGS__)
+#else
+#define LOG_PPU(...)
+#endif
+
 /* Manual access to gMain (the engine's Main struct): including main.h
  * would pull in player.h, which uses `this` as a C parameter name and
  * doesn't compile as C++. Treat the symbol as opaque bytes and read the
@@ -56,6 +64,10 @@ static int sScaledTextureScale = 0;
 static uint32_t* sScaledBuf = nullptr;
 static int sScaledBufScale = 0;
 static SDL_Window* sWindow = nullptr;
+static SDL_Window* sSecondaryWindow = nullptr;
+static SDL_Renderer* sSecondaryRenderer = nullptr;
+static SDL_Texture* sSecondaryHUDTexture = nullptr;
+static struct ANativeWindow* sPendingSecondaryNativeWindow = nullptr;
 #ifdef launcher
 static SDL_Window* sBootstrapWindow = nullptr;
 #endif
@@ -328,6 +340,9 @@ extern "C" void Port_PPU_Init(SDL_Window* window) {
     virtuappu_registers.frame_width = MODE1_GBA_WIDTH;
     virtuappu_registers.mode = 1;
 
+    // TMC: HUD is on BG0. Enable separate buffer so we can mirror it without game background.
+    virtuappu_separate_bg0 = 1;
+
     if (sBackend == RenderBackend::None) {
         sFrameSurface = SDL_CreateSurfaceFrom(
             MODE1_GBA_WIDTH,
@@ -353,6 +368,21 @@ extern "C" void Port_PPU_Init(SDL_Window* window) {
     } else {
         printf("PPU initialized with SDL renderer backend.\n");
     }
+}
+
+extern "C" void Port_PPU_SetSecondaryNativeWindow(ANativeWindow* window) {
+    LOG_PPU("Port_PPU_SetSecondaryNativeWindow: %p", window);
+    if (sPendingSecondaryNativeWindow) {
+        ANativeWindow_release(sPendingSecondaryNativeWindow);
+    }
+    sPendingSecondaryNativeWindow = window;
+    if (window) {
+        ANativeWindow_acquire(window);
+    }
+}
+
+extern "C" void Port_PPU_SetSecondaryWindow(SDL_Window* window) {
+    // No longer used, we use native window directly
 }
 
 extern "C" void Port_PPU_PresentFrame(void) {
@@ -488,7 +518,64 @@ extern "C" void Port_PPU_PresentFrame(void) {
         SDL_SetRenderDrawColor(sRenderer, 0, 0, 0, 255);
         SDL_RenderClear(sRenderer);
         SDL_RenderTexture(sRenderer, tex, nullptr, &dst);
-        {
+
+        if (sPendingSecondaryNativeWindow) {
+            // Already set via global property in JNI call
+            sSecondaryWindow = SDL_CreateWindow("Secondary", 1280, 720, SDL_WINDOW_BORDERLESS);
+            if (sSecondaryWindow) {
+                LOG_PPU("Secondary window created successfully: %p", sSecondaryWindow);
+                Port_TouchControls_SetTargetWindow(sSecondaryWindow);
+                sSecondaryRenderer = SDL_CreateRenderer(sSecondaryWindow, nullptr);
+                if (sSecondaryRenderer) {
+                    SDL_SetRenderVSync(sSecondaryRenderer, 0);
+                }
+            }
+            sPendingSecondaryNativeWindow = nullptr;
+        }
+
+        if (sSecondaryRenderer) {
+            if (!sSecondaryHUDTexture) {
+                sSecondaryHUDTexture = SDL_CreateTexture(sSecondaryRenderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, 240, 160);
+                if (sSecondaryHUDTexture) {
+                    SDL_SetTextureScaleMode(sSecondaryHUDTexture, SDL_SCALEMODE_NEAREST);
+                }
+            }
+
+            if (sSecondaryHUDTexture) {
+                // Use separate BG0 buffer for clean HUD without game background
+                SDL_UpdateTexture(sSecondaryHUDTexture, nullptr, virtuappu_bg0_buffer, MODE1_GBA_WIDTH * sizeof(uint32_t));
+            }
+
+            SDL_SetRenderDrawColor(sSecondaryRenderer, 15, 15, 20, 255); // Dark background
+            SDL_RenderClear(sSecondaryRenderer);
+            int sw = 0, sh = 0;
+            SDL_GetRenderOutputSize(sSecondaryRenderer, &sw, &sh);
+
+            if (sSecondaryHUDTexture) {
+                SDL_SetTextureBlendMode(sSecondaryHUDTexture, SDL_BLENDMODE_BLEND);
+
+                // Scale up the HUD elements for better visibility on handheld
+                float hudScale = (float)sw / 240.0f * 1.4f;
+
+                // 1. Hearts (Top Left) - Use wider rect to catch all hearts and animations
+                SDL_FRect srcHearts = {0, 0, 160, 48};
+                SDL_FRect dstHearts = {20, 20, 160.0f * hudScale, 48.0f * hudScale};
+                SDL_RenderTexture(sSecondaryRenderer, sSecondaryHUDTexture, &srcHearts, &dstHearts);
+
+                // 2. Rupees & Keys (Bottom Right -> Middle Right)
+                SDL_FRect srcRupees = {150, 120, 90, 40};
+                SDL_FRect dstRupees = {(float)sw - 90.0f * hudScale - 20, 20, 90.0f * hudScale, 40.0f * hudScale};
+                SDL_RenderTexture(sSecondaryRenderer, sSecondaryHUDTexture, &srcRupees, &dstRupees);
+
+                // 3. A/B Buttons (Top Right -> Top Center)
+                SDL_FRect srcButtons = {170, 0, 70, 50};
+                SDL_FRect dstButtons = {((float)sw - 70.0f * hudScale) / 2.0f, 10, 70.0f * hudScale, 50.0f * hudScale};
+                SDL_RenderTexture(sSecondaryRenderer, sSecondaryHUDTexture, &srcButtons, &dstButtons);
+            }
+
+            Port_TouchControls_Render(sSecondaryRenderer, sw, sh);
+            SDL_RenderPresent(sSecondaryRenderer);
+        } else {
             extern void Port_DebugMenu_Render(SDL_Renderer*, int, int);
             Port_DebugMenu_Render(sRenderer, outW, outH);
             extern void Port_SoftSlots_RenderOverlay(void*, int, int);
@@ -614,6 +701,18 @@ extern "C" void Port_OpenInGameSettingsModal(void) {
 }
 
 extern "C" void Port_PPU_Shutdown(void) {
+    if (sSecondaryHUDTexture) {
+        SDL_DestroyTexture(sSecondaryHUDTexture);
+        sSecondaryHUDTexture = nullptr;
+    }
+    if (sSecondaryRenderer) {
+        SDL_DestroyRenderer(sSecondaryRenderer);
+        sSecondaryRenderer = nullptr;
+    }
+    if (sSecondaryWindow) {
+        SDL_DestroyWindow(sSecondaryWindow);
+        sSecondaryWindow = nullptr;
+    }
     if (sWindow && sBackend == RenderBackend::Surface) {
         SDL_DestroyWindowSurface(sWindow);
     }
