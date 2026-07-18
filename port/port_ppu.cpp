@@ -557,20 +557,20 @@ extern "C" void Port_PPU_PresentFrame(void) {
                 // Scale up the HUD elements for better visibility on handheld
                 float hudScale = (float)sw / 240.0f * 1.4f;
 
-                // 1. Hearts (Top Left) - Use wider rect to catch all hearts and animations
+                // 1. Hearts (Top Left)
                 SDL_FRect srcHearts = {0, 0, 160, 48};
                 SDL_FRect dstHearts = {20, 20, 160.0f * hudScale, 48.0f * hudScale};
                 SDL_RenderTexture(sSecondaryRenderer, sSecondaryHUDTexture, &srcHearts, &dstHearts);
 
-                // 2. Rupees & Keys (Bottom Right -> Middle Right)
-                SDL_FRect srcRupees = {150, 120, 90, 40};
-                SDL_FRect dstRupees = {(float)sw - 90.0f * hudScale - 20, 20, 90.0f * hudScale, 40.0f * hudScale};
-                SDL_RenderTexture(sSecondaryRenderer, sSecondaryHUDTexture, &srcRupees, &dstRupees);
-
-                // 3. A/B Buttons (Top Right -> Top Center)
+                // 2. A/B/R Buttons (Top Right)
                 SDL_FRect srcButtons = {170, 0, 70, 50};
-                SDL_FRect dstButtons = {((float)sw - 70.0f * hudScale) / 2.0f, 10, 70.0f * hudScale, 50.0f * hudScale};
+                SDL_FRect dstButtons = {(float)sw - 70.0f * hudScale - 20, 10, 70.0f * hudScale, 50.0f * hudScale};
                 SDL_RenderTexture(sSecondaryRenderer, sSecondaryHUDTexture, &srcButtons, &dstButtons);
+
+                // 3. Rupees & Keys (Bottom Right)
+                SDL_FRect srcRupees = {150, 120, 90, 40};
+                SDL_FRect dstRupees = {(float)sw - 90.0f * hudScale - 20, (float)sh - 40.0f * hudScale - 20, 90.0f * hudScale, 40.0f * hudScale};
+                SDL_RenderTexture(sSecondaryRenderer, sSecondaryHUDTexture, &srcRupees, &dstRupees);
             }
 
             Port_TouchControls_Render(sSecondaryRenderer, sw, sh);

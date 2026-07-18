@@ -1100,3 +1100,6 @@
 0	22	0	/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/arm64-v8a/CMakeFiles/cmake.verify_globs	67dea276f1b5f6d7
 14	123	1784336417696638304	CMakeFiles/main.dir/home/azu/git/tmc/libs/ViruaPPU/src/mode1.c.o	e6933142344921cb
 124	561	1784336418123637887	/home/azu/git/tmc/android/app/build/intermediates/cxx/Debug/3e5s16k6/obj/arm64-v8a/libmain.so	9e595be369b7f363
+0	9	0	/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/arm64-v8a/CMakeFiles/cmake.verify_globs	67dea276f1b5f6d7
+13	161	1784336561982496822	CMakeFiles/main.dir/home/azu/git/tmc/port/port_ppu.cpp.o	987d7b4657a27842
+161	525	1784336562332496478	/home/azu/git/tmc/android/app/build/intermediates/cxx/Debug/3e5s16k6/obj/arm64-v8a/libmain.so	9e595be369b7f363
