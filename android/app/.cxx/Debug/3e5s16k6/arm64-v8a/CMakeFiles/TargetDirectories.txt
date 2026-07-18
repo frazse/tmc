@@ -1,8 +1,0 @@
-/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/arm64-v8a/CMakeFiles/main.dir
-/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/arm64-v8a/CMakeFiles/edit_cache.dir
-/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/arm64-v8a/CMakeFiles/rebuild_cache.dir
-/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/arm64-v8a/SDL/CMakeFiles/SDL3-shared.dir
-/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/arm64-v8a/SDL/CMakeFiles/SDL3_test.dir
-/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/arm64-v8a/SDL/CMakeFiles/SDL_uclibc.dir
-/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/arm64-v8a/SDL/CMakeFiles/edit_cache.dir
-/home/azu/git/tmc/android/app/.cxx/Debug/3e5s16k6/arm64-v8a/SDL/CMakeFiles/rebuild_cache.dir

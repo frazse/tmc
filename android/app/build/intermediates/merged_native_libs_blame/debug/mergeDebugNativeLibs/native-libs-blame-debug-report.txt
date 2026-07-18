@@ -1,6 +1,0 @@
-lib/arm64-v8a/libSDL3.so->Project
-lib/arm64-v8a/libc++_shared.so->Project
-lib/arm64-v8a/libmain.so->Project
-lib/x86_64/libSDL3.so->Project
-lib/x86_64/libc++_shared.so->Project
-lib/x86_64/libmain.so->Project
