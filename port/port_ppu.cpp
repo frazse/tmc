@@ -51,6 +51,23 @@ enum class PresentMode {
 static const int kHiResW = 960;
 static const int kHiResH = 640;
 
+// Manual declarations to avoid C++ keyword conflicts in GBA headers
+extern "C" {
+    typedef struct {
+        uint8_t state;
+        uint8_t unk;
+        uint8_t textSpeed;
+        uint8_t unk3;
+        uint8_t textWindowWidth;
+        uint8_t textWindowHeight;
+        uint8_t textWindowPosX;
+        uint8_t textWindowPosY;
+        uint16_t textIndex;
+        uint16_t unk2;
+    } PortMessage;
+    extern PortMessage gMessage;
+}
+
 static RenderBackend sBackend = RenderBackend::None;
 static SDL_Renderer* sRenderer = nullptr;
 static SDL_Texture* sLowResTexture = nullptr;   /* 240x160 raw upload */
@@ -535,7 +552,7 @@ extern "C" void Port_PPU_PresentFrame(void) {
 
         if (sSecondaryRenderer) {
             if (!sSecondaryHUDTexture) {
-                sSecondaryHUDTexture = SDL_CreateTexture(sSecondaryRenderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, 240, 160);
+                sSecondaryHUDTexture = SDL_CreateTexture(sSecondaryRenderer, SDL_PIXELFORMAT_ABGR8888, SDL_TEXTUREACCESS_STREAMING, MODE1_GBA_WIDTH, MODE1_GBA_HEIGHT);
                 if (sSecondaryHUDTexture) {
                     SDL_SetTextureScaleMode(sSecondaryHUDTexture, SDL_SCALEMODE_NEAREST);
                 }
@@ -553,24 +570,39 @@ extern "C" void Port_PPU_PresentFrame(void) {
 
             if (sSecondaryHUDTexture) {
                 SDL_SetTextureBlendMode(sSecondaryHUDTexture, SDL_BLENDMODE_BLEND);
-
-                // Scale up the HUD elements for better visibility on handheld
-                float hudScale = (float)sw / 240.0f * 1.4f;
+                float hScale = (float)sw / 240.0f;
 
                 // 1. Hearts (Top Left)
-                SDL_FRect srcHearts = {0, 0, 160, 48};
-                SDL_FRect dstHearts = {20, 20, 160.0f * hudScale, 48.0f * hudScale};
-                SDL_RenderTexture(sSecondaryRenderer, sSecondaryHUDTexture, &srcHearts, &dstHearts);
+                // Expanded capture to catch all hearts including animations
+                SDL_FRect srcH = {2, 2, 100, 32};
+                SDL_FRect dstH = {15, 15, 100.0f * hScale * 1.3f, 32.0f * hScale * 1.3f};
+                SDL_RenderTexture(sSecondaryRenderer, sSecondaryHUDTexture, &srcH, &dstH);
 
-                // 2. A/B/R Buttons (Top Right)
-                SDL_FRect srcButtons = {170, 0, 70, 50};
-                SDL_FRect dstButtons = {(float)sw - 70.0f * hudScale - 20, 10, 70.0f * hudScale, 50.0f * hudScale};
-                SDL_RenderTexture(sSecondaryRenderer, sSecondaryHUDTexture, &srcButtons, &dstButtons);
+                // 2. A/B/R Buttons & Labels (Top Right)
+                SDL_FRect srcB = {160, 0, 78, 50};
+                SDL_FRect dstB = {(float)sw - 78.0f * hScale * 1.3f - 15, 15, 78.0f * hScale * 1.3f, 50.0f * hScale * 1.3f};
+                SDL_RenderTexture(sSecondaryRenderer, sSecondaryHUDTexture, &srcB, &dstB);
 
                 // 3. Rupees & Keys (Bottom Right)
-                SDL_FRect srcRupees = {150, 120, 90, 40};
-                SDL_FRect dstRupees = {(float)sw - 90.0f * hudScale - 20, (float)sh - 40.0f * hudScale - 20, 90.0f * hudScale, 40.0f * hudScale};
-                SDL_RenderTexture(sSecondaryRenderer, sSecondaryHUDTexture, &srcRupees, &dstRupees);
+                SDL_FRect srcR = {165, 125, 75, 35};
+                SDL_FRect dstR = {(float)sw - 75.0f * hScale * 1.6f - 15, (float)sh - 35.0f * hScale * 1.6f - 30, 75.0f * hScale * 1.6f, 35.0f * hScale * 1.6f};
+                SDL_RenderTexture(sSecondaryRenderer, sSecondaryHUDTexture, &srcR, &dstR);
+
+                // 4. Dialog Box (Dynamically Locked to Center)
+                if ((gMessage.state & 0x7F) != 0) {
+                    float dy = (float)gMessage.textWindowPosY * 8.0f;
+                    float dh = (float)gMessage.textWindowHeight * 8.0f + 16.0f;
+
+                    SDL_FRect srcBox = {4, dy - 8.0f, 232, dh};
+                    if (srcBox.y < 0) srcBox.y = 0;
+                    if (srcBox.y + srcBox.h > 160) srcBox.h = 160 - srcBox.y;
+
+                    SDL_FRect dstBox = {0, 0, srcBox.w * hScale * 1.1f, srcBox.h * hScale * 1.1f};
+                    dstBox.x = ((float)sw - dstBox.w) / 2.0f;
+                    dstBox.y = ((float)sh - dstBox.h) / 2.2f;
+
+                    SDL_RenderTexture(sSecondaryRenderer, sSecondaryHUDTexture, &srcBox, &dstBox);
+                }
             }
 
             Port_TouchControls_Render(sSecondaryRenderer, sw, sh);
